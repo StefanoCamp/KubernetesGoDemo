@@ -73,6 +73,8 @@ Useful Kubernetes commands:
 kubectl get pods
 kubectl logs <pod-name>
 kubectl describe pod <pod-name>
+kubectl exec -it <pod-name> -- sh
+kubectl get events --sort-by=.metadata.creationTimestamp
 kubectl port-forward service/kubernetes-go-api-demo 8080:80
 ```
 
