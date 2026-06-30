@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-go-api-demo
+  labels:
+    app: kubernetes-go-api-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kubernetes-go-api-demo
+  template:
+    metadata:
+      labels:
+        app: kubernetes-go-api-demo
+    spec:
+      containers:
+        - name: api
+          image: kubernetes-go-api-demo:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: kubernetes-go-api-demo-config
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
